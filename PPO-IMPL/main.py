@@ -86,7 +86,8 @@ if __name__ == '__main__':
         score = 0
         while not done:
             action, prob, val = agent.choose_action(observation)
-            observation_, reward, done, info = env.step(action)
+            real_action = env.action_space[action]
+            observation_, reward, done, info = env.step(real_action)
             n_steps += 1
             score += reward
             agent.remember(observation, action, prob, val, reward, done)
