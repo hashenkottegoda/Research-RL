@@ -64,7 +64,7 @@ if __name__ == '__main__':
     # agent = Agent(n_actions=env.action_space.n, batch_size=batch_size, 
     #                 alpha=alpha, n_epochs=n_epochs, 
     #                 input_dims=env.observation_space.shape)
-    agent = Agent(n_actions=3, batch_size=batch_size, 
+    agent = Agent(n_actions=len(env.action_space), batch_size=batch_size, 
                     alpha=alpha, n_epochs=n_epochs, 
                     input_dims=env.observation_space.shape)
     n_games = 300
