@@ -98,23 +98,18 @@ class CustomEnv:
         return observation, reward, done, info
     
 if __name__ == '__main__':
-    # env = gym.make('CartPole-v0')
     env = CustomEnv()
     N = 12
     batch_size = 4
     n_epochs = 10
     alpha = 0.0003
-    # agent = Agent(n_actions=env.action_space.n, batch_size=batch_size, 
-    #                 alpha=alpha, n_epochs=n_epochs, 
-    #                 input_dims=env.observation_space.shape)
+
     agent = Agent(n_actions=len(env.action_space), batch_size=batch_size, 
                     alpha=alpha, n_epochs=n_epochs, 
                     input_dims=env.sample_observation.shape)
-    # n_games = 100
 
     figure_file = 'plots/cartpole.png'
 
-    # best_score = env.reward_range[0]
     best_score = -float('inf')
     score_history = []
 
@@ -148,7 +143,6 @@ if __name__ == '__main__':
         print('step', n_steps, 'score %.1f' % score,
         'time_steps', n_steps, 'learning_steps', learn_iters)
     score_history.append(score)
-    #avg_score = np.mean(score_history[-100:])
 
     agent.save_models()
     
