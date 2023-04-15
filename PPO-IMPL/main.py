@@ -43,8 +43,13 @@ class CustomEnv:
         return arr
     
     def reset(self):
-        return self.observation_space[0]
-
+        # get user input for weight, fat, emotion
+        weight = input("Enter weight: ")
+        fat = input("Enter fat: ")
+        emotion = input("Enter emotion: ")
+        observation = [weight, fat, emotion]
+        return observation
+    
     def step(self, action):
         observation = self.observation_space[0]
         reward = 0.0
