@@ -91,16 +91,16 @@ class CustomEnv:
             reward = reward
 
         if weight == -1:    
-            done = False
-        else:
             done = True
+        else:
+            done = False
         info = {}
         return observation, reward, done, info
     
 if __name__ == '__main__':
     # env = gym.make('CartPole-v0')
     env = CustomEnv()
-    N = 20
+    N = 4
     batch_size = 5
     n_epochs = 4
     alpha = 0.0003
