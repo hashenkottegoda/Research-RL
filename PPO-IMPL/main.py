@@ -6,6 +6,7 @@ class CustomEnv:
     def __init__(self):
         self.action_space = self.getActionSpace()
         self.observation_space = self.getObservationSpace()
+        self.sample_observation = self.observation_space[0]
         self.reward_range = (-float('inf'), float('inf'))
 
     def getActionSpace(self):
@@ -66,8 +67,8 @@ if __name__ == '__main__':
     #                 input_dims=env.observation_space.shape)
     agent = Agent(n_actions=len(env.action_space), batch_size=batch_size, 
                     alpha=alpha, n_epochs=n_epochs, 
-                    input_dims=env.observation_space.shape)
-    n_games = 300
+                    input_dims=env.sample_observation.shape)
+    n_games = 10
 
     figure_file = 'plots/cartpole.png'
 
