@@ -75,13 +75,29 @@ class CustomEnv:
                 reward = reward
 
         # Fat reward
-        if fat > oldFat:
-            reward = reward+1
-        elif fat < oldFat:
-            reward = reward-1
-        elif fat == oldFat:
-            reward = reward
-
+        if fat == 3:
+            if oldFat == 3:
+                reward = reward
+            elif oldFat != 3:
+                reward = reward+1
+        elif fat != 3:
+            if oldFat == 3:
+                reward = reward-1
+            elif oldFat != 3:
+                if fat < 3:
+                    if fat > oldFat:
+                        reward = reward+0.5
+                    elif fat < oldFat:
+                        reward = reward-0.5
+                    elif fat == oldFat:
+                        reward = reward
+                elif fat > 3:
+                    if fat < oldFat:
+                        reward = reward+0.5
+                    elif fat > oldFat:
+                        reward = reward-0.5
+                    elif fat == oldFat:
+                        reward = reward
         # Emotion reward
         if emotion > oldEmotion:
             reward = reward+1
