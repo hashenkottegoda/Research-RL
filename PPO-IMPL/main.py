@@ -149,7 +149,7 @@ if __name__ == '__main__':
 
     agent.save_models()
 
-    print('episode', i, 'score %.1f' % score, 'avg score %.1f' % avg_score,
+    print('step', n_steps, 'score %.1f' % score, 'avg score %.1f' % avg_score,
             'time_steps', n_steps, 'learning_steps', learn_iters)
         
     x = [i+1 for i in range(len(score_history))]
