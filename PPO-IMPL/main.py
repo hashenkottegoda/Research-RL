@@ -44,17 +44,17 @@ class CustomEnv:
     
     def reset(self):
         # get user input for weight, fat, emotion
-        weight = input("Enter weight: ")
-        fat = input("Enter fat: ")
-        emotion = input("Enter emotion: ")
+        weight = int(input("Enter weight: "))
+        fat = int(input("Enter fat: "))
+        emotion = int(input("Enter emotion: "))
         observation = [weight, fat, emotion]
         return observation
     
     def step(self, old_state, action):
         # get user input for weight, fat, emotion
-        weight = input("Enter weight: ")
-        fat = input("Enter fat: ")
-        emotion = input("Enter emotion: ")
+        weight = int(input("Enter weight: "))
+        fat = int(input("Enter fat: "))
+        emotion = int(input("Enter emotion: "))
         observation = [weight, fat, emotion]   
 
         oldWeight = old_state[0]
