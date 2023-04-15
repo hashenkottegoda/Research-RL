@@ -100,9 +100,9 @@ class CustomEnv:
 if __name__ == '__main__':
     # env = gym.make('CartPole-v0')
     env = CustomEnv()
-    N = 4
-    batch_size = 5
-    n_epochs = 4
+    N = 12
+    batch_size = 4
+    n_epochs = 10
     alpha = 0.0003
     # agent = Agent(n_actions=env.action_space.n, batch_size=batch_size, 
     #                 alpha=alpha, n_epochs=n_epochs, 
