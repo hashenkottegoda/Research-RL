@@ -50,13 +50,50 @@ class CustomEnv:
         observation = [weight, fat, emotion]
         return observation
     
-    def step(self, action):
-        observation = self.observation_space[0]
-        reward = 0.0
-        if action ==2:
-            done=True
+    def step(self, old_state, action):
+        # get user input for weight, fat, emotion
+        weight = input("Enter weight: ")
+        fat = input("Enter fat: ")
+        emotion = input("Enter emotion: ")
+        observation = [weight, fat, emotion]   
+
+        oldWeight = old_state[0]
+        oldFat = old_state[1]
+        oldEmotion = old_state[2]
+
+        reward = 0
+        # Weight reward
+        if weight == 2:
+            if oldWeight == 2:
+                reward = reward
+            elif oldWeight != 2:
+                reward = reward+1
+        elif weight != 2:
+            if oldWeight == 2:
+                reward = reward-1
+            elif oldWeight != 2:
+                reward = reward
+
+        # Fat reward
+        if fat > oldFat:
+            reward = reward+1
+        elif fat < oldFat:
+            reward = reward-1
+        elif fat == oldFat:
+            reward = reward
+
+        # Emotion reward
+        if emotion > oldEmotion:
+            reward = reward+1
+        elif emotion < oldEmotion:
+            reward = reward-1
+        elif emotion == oldEmotion:
+            reward = reward
+
+        if weight == -1:    
+            done = False
         else:
-            done=False 
+            done = True
         info = {}
         return observation, reward, done, info
     
@@ -73,7 +110,7 @@ if __name__ == '__main__':
     agent = Agent(n_actions=len(env.action_space), batch_size=batch_size, 
                     alpha=alpha, n_epochs=n_epochs, 
                     input_dims=env.sample_observation.shape)
-    n_games = 10
+    n_games = 100
 
     figure_file = 'plots/cartpole.png'
 
@@ -92,7 +129,7 @@ if __name__ == '__main__':
         while not done:
             action, prob, val = agent.choose_action(observation)
             real_action = env.action_space[action]
-            observation_, reward, done, info = env.step(real_action)
+            observation_, reward, done, info = env.step(observation, real_action)
             n_steps += 1
             score += reward
             agent.remember(observation, action, prob, val, reward, done)
