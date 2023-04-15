@@ -125,7 +125,7 @@ if __name__ == '__main__':
     # check if the model is already trained and load it
     try:
         agent.load_models()
-        print('...loading saved models...')
+        print('...loaded saved models...')
     except:
         print('...no saved models, starting training from scratch...')
         pass
@@ -144,13 +144,13 @@ if __name__ == '__main__':
             agent.learn()
             learn_iters += 1
         observation = observation_
+
+        print('step', n_steps, 'score %.1f' % score,
+        'time_steps', n_steps, 'learning_steps', learn_iters)
     score_history.append(score)
-    avg_score = np.mean(score_history[-100:])
+    #avg_score = np.mean(score_history[-100:])
 
     agent.save_models()
-
-    print('step', n_steps, 'score %.1f' % score, 'avg score %.1f' % avg_score,
-            'time_steps', n_steps, 'learning_steps', learn_iters)
-        
+    
     x = [i+1 for i in range(len(score_history))]
     plot_learning_curve(x, score_history, figure_file)
