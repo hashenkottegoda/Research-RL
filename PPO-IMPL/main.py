@@ -26,7 +26,7 @@ class CustomEnv:
         return listOflist
     
     def getObservationSpace(self):
-        weightArr = ["low", "medium", "high"]
+        weightArr = [1, 2, 3]
         fatArr = [1,2,3,4,5]
         emotionArr = [1,2,3,4,5]
 
@@ -42,10 +42,10 @@ class CustomEnv:
         return arr
     
     def reset(self):
-        return np.zeros((4,))
+        return self.observation_space[0]
 
     def step(self, action):
-        observation = np.zeros((4,))
+        observation = self.observation_space[0]
         reward = 0.0
         if action ==2:
             done=True
