@@ -1,0 +1,8 @@
+torch==2.0.0
+gym==0.26.2
+numpy==1.24.2
+matplotlib==3.7.1
+Flask==2.2.3
+rule_engine==3.5.1
+pymongo==4.3.3
+

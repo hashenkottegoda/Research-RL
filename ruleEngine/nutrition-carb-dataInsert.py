@@ -1,7 +1,7 @@
 import pymongo
 client = pymongo.MongoClient("mongodb+srv://y4s1assignments:5bdk2OiVOb4DIKVi@cluster0.m94hxjb.mongodb.net/?retryWrites=true&w=majority")
 db = client["Dog_Care_Research"]
-collection = db["Dairy"]
+collection = db["Carbohydrates"]
 
 # Check if the connection to the MongoDB instance is successful
 try:
@@ -13,10 +13,10 @@ except pymongo.errors.ServerSelectionTimeoutError as error:
 
 # Insert a document into the collection
 records = [
-    {"name": "milk", "category": "dairy", "p": 0, "f": 0, "c": 0, "ckl": 0}, 
-    {"name": "yoghurt", "category": "dairy" , "p": 0, "f": 0, "c": 0, "ckl": 0},
-    {"name": "cheese", "category": "dairy" , "p": 0, "f": 0, "c": 0, "ckl": 0},
-    {"name": "cottage cheese", "category": "dairy", "p": 0, "f": 0, "c": 0, "ckl": 0},
+    {"name": "oats", "category": "whole grains", "p": 11.1, "f": 6.9, "c":62.4, "ckl":379}, 
+    {"name": "barley", "category": "whole grains", "p":12, "f":2.3, "c":73, "ckl":354}, 
+    {"name": "brown rice", "category": "whole grains", "p":2.6, "f":0.9, "c":23, "ckl":111}, 
+    {"name": "quinoa", "category": "whole grains", "p":3.54, "f":1.8, "c":25.22, "ckl":112}
 ]
 collection.insert_many(records)
 print("Document inserted successfully!")

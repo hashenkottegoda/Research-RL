@@ -352,14 +352,15 @@ def getMineralReq():
         elif defOrExc == 'exc':
           print('Vitamin '+mineral.capitalize()+' excess detected!')
 
-fetchDbInfo()
-print('Dog Information: '+str(vars(dog)))
-print('Protein: '+str(getProteinReq())+'g')
-print('Fat: '+str(getFatReq())+'g')
-print('Energy Requirement: '+str(getEnergyReq())+' kcals')
-print('Carbohydrate : '+str(getCarbohydrateReq())+'g')
-getVitaminReq()
-getMineralReq()
+def getNitrogenReq():
+  fetchDbInfo()
+  print('Dog Information: '+str(vars(dog)))
+  print('Protein: '+str(getProteinReq())+'g')
+  print('Fat: '+str(getFatReq())+'g')
+  print('Energy Requirement: '+str(getEnergyReq())+' kcals')
+  print('Carbohydrate : '+str(getCarbohydrateReq())+'g')
+  getVitaminReq()
+  getMineralReq()
 
 
 
