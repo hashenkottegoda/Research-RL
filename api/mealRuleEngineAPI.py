@@ -11,7 +11,7 @@ mineralCollection = db["Minerals"]
 dogCollection = db["Dogs"]
 
 class Dog(object):
-    def __init__(self, breed, activityLevel, age, weight, sex, pregnancy, noOfPuppies, healthStatus ):
+    def __init__(self, breed, activityLevel, age, weight, sex, pregnancy, noOfPuppies, healthStatus, fatLevel ):
         self.breed = breed
         self.sClass = None
         self.activityLevel = activityLevel
@@ -25,6 +25,7 @@ class Dog(object):
         self.maxWeight = None
         self.averageActivityLevel = None
         self.numberOfMeals = None
+        self.fatLevel = fatLevel
 # dog = Dog('Basset', 5, 30, 50, 'female', 'True', 4, ['Restlessness', 'Anorexia', 'muscle weakness'])
 
 # get dog object by id from the database dog collection
@@ -33,9 +34,9 @@ def getDogById(id):
   id = ObjectId(id)
   return dogCollection.find_one({"_id": id})
 
-dogObj = getDogById("643be67e7fd5be6b8071d4e0")
+dogObj = getDogById("643c53f9a8e3c9c1a423af8e")
 # create dog object from the dog object retrieved from the database
-dog = Dog(dogObj["breed"], dogObj["activityLevel"], dogObj["age"], dogObj["weight"], dogObj["sex"], dogObj["pregnancy"], dogObj["noOfPuppies"], dogObj["healthStatus"])
+dog = Dog(dogObj["breed"], dogObj["activityLevel"], dogObj["age"], dogObj["weight"], dogObj["sex"], dogObj["pregnancy"], dogObj["noOfPuppies"], dogObj["healthStatus"], dogObj["fatLevel"])
 
 
 dogHealthStatus = []

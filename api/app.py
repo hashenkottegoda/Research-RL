@@ -18,7 +18,7 @@ def createDog():
     # Insert a document into the collection and handle the error
     try:
         dogCollection.insert_one(request.json)
-        return 'Inserted dog successfully!'
+        return jsonify({"message": "dog inserted successfully!"})
     except Exception as error:
         return f"Error: {error}"
 
