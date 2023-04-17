@@ -30,20 +30,16 @@ class Dog(object):
 
 # get dog object by id from the database dog collection
 def getDogById(id):
+  print("getDogById")
   # convert id to ObjectId
   id = ObjectId(id)
-  return dogCollection.find_one({"_id": id})
+  dogObj = dogCollection.find_one({"_id": id})
 
-dogObj = getDogById("643c53f9a8e3c9c1a423af8e")
-# create dog object from the dog object retrieved from the database
-dog = Dog(dogObj["breed"], dogObj["activityLevel"], dogObj["age"], dogObj["weight"], dogObj["sex"], dogObj["pregnancy"], dogObj["noOfPuppies"], dogObj["healthStatus"], dogObj["fatLevel"])
+  # create dog object from the dog object retrieved from the database
+  dog = Dog(dogObj["breed"], dogObj["activityLevel"], dogObj["age"], dogObj["weight"], dogObj["sex"], dogObj["pregnancy"], dogObj["noOfPuppies"], dogObj["healthStatus"], dogObj["fatLevel"])
 
+  return dog
 
-dogHealthStatus = []
-for value in dog.healthStatus:
-    healthdic = {}
-    healthdic['healthStatus'] = value
-    dogHealthStatus.append(healthdic)
 
 context = rule_engine.Context(resolver=rule_engine.resolve_attribute)
 
@@ -128,7 +124,7 @@ MineralRuleArray = {
   'rule_mn_iodine_def ': rule_mn_iodine_def , 
   }
 
-def fetchDbInfo():
+def fetchDbInfo(dog):
   try:
     client.admin.command('ismaster')
     print("Db Connection successful!")
@@ -142,7 +138,9 @@ def fetchDbInfo():
   dog.maxWeight = dogDb["MaxWeight"]
   dog.averageActivityLevel = dogDb["AverageActivity"]
 
-def getProteinReq():
+  return dog
+
+def getProteinReq(dog):
   match dog.sClass:
     case 1:
       if rule_pregnant.matches(dog):
@@ -187,7 +185,7 @@ def getProteinReq():
     case _:
       return "Error"
 
-def getFatReq():
+def getFatReq(dog):
   match dog.sClass:
     case 1:
       if rule_pregnant.matches(dog):
@@ -232,7 +230,7 @@ def getFatReq():
     case _:
       return "Error"
 
-def getEnergyReq():
+def getEnergyReq(dog):
   match dog.sClass:
     case 1:
       if rule_pregnant.matches(dog):
@@ -327,11 +325,11 @@ def getEnergyReq():
     case _:
       return "Error"
 
-def getCarbohydrateReq():
+def getCarbohydrateReq(dog):
   return 4*dog.weight
 
 # implementation for vitamins
-def getVitaminReq():
+def getVitaminReq(dogHealthStatus):
   for condition in dogHealthStatus:
     for key, value in vitaminRuleArray.items():
       issue = (key.split("_",1)[1])
@@ -341,12 +339,14 @@ def getVitaminReq():
         if defOrExc == 'def':
           amount = vitaminCollection.find_one({"rule": issue})
           print('Vitamin '+vitamin.capitalize()+' deficiency detected! (Recomended: '+str(amount['allowance'])+'µg)')
+          return 'Vitamin '+vitamin.capitalize() +' '+ str(amount['allowance'])+'µg'
           # print('Recomended Allowance: '+str(amount['allowance'])+'µg')
         elif defOrExc == 'exc':
           print('Vitamin '+vitamin.capitalize()+' excess detected!')
+          return 'Vitamin '+vitamin.capitalize()+' excess'
 
 # implementation for minerels
-def getMineralReq():
+def getMineralReq(dogHealthStatus):
   for condition in dogHealthStatus:
     for key, value in MineralRuleArray.items():
       issue = (key.split("_",1)[1])
@@ -359,17 +359,38 @@ def getMineralReq():
         if defOrExc == 'def':
           amount = mineralCollection.find_one({"rule": issue})
           print('Mineral '+mineral.capitalize()+' deficiency detected! (Recomended: '+str(amount['allowance'])+'µg)')
+          return 'Mineral '+mineral.capitalize() +' '+ str(amount['allowance'])+'µg'
           # print('Recomended Allowance: '+str(amount['allowance'])+'µg')
         elif defOrExc == 'exc':
           print('Vitamin '+mineral.capitalize()+' excess detected!')
+          return 'Vitamin '+mineral.capitalize()+' excess'
 
-def getNitrogenReq():
-  fetchDbInfo()
-  print('Dog Information: '+str(vars(dog)))
-  print('Protein: '+str(getProteinReq())+'g')
-  print('Fat: '+str(getFatReq())+'g')
-  print('Energy Requirement: '+str(getEnergyReq())+' kcals')
-  print('Carbohydrate : '+str(getCarbohydrateReq())+'g')
-  getVitaminReq()
-  getMineralReq()
+def getNutritionReq(id):
+  print("getNutritionReq")
+  dog = getDogById(id)
+  print(dog)
+  dog = fetchDbInfo(dog)
+  # print('Dog Information: '+str(vars(dog)))
+  # print('Protein: '+str(getProteinReq())+'g')
+  # print('Fat: '+str(getFatReq())+'g')
+  # print('Energy Requirement: '+str(getEnergyReq())+' kcals')
+  # print('Carbohydrate : '+str(getCarbohydrateReq())+'g')
+  # getVitaminReq()
+  # getMineralReq()
+  # return json object of the dog's nutrient requirements
+  dogHealthStatus = []
+  for value in dog.healthStatus:
+    healthdic = {}
+    healthdic['healthStatus'] = value
+    dogHealthStatus.append(healthdic)
+
+    nutritionPlanFromRuleEngine = {
+    'protein': getProteinReq(dog),
+    'fat': getFatReq(dog),
+    'energy': getEnergyReq(dog),
+    'carbohydrate': getCarbohydrateReq(dog),
+    'vitamins': getVitaminReq(dogHealthStatus),
+    'minerals': getMineralReq(dogHealthStatus)
+  }
+  return dog, nutritionPlanFromRuleEngine
 

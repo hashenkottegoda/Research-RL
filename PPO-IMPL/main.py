@@ -148,6 +148,7 @@ if __name__ == '__main__':
         action, prob, val = agent.choose_action(observation)
         real_action = env.action_space[action]
         print(real_action)
+       
         observation_, reward, done, info = env.step(observation, real_action)
         n_steps += 1
         score += reward
