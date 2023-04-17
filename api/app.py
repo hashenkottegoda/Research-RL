@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
 from mealRuleEngineAPI import getNutritionReq
-from ruleRLconnector import getNutritionPlan
+from ruleRLconnector import getUpdatedNutritionPlan, getCurrentNutritionPlan
 import pymongo
 client = pymongo.MongoClient("mongodb+srv://y4s1assignments:5bdk2OiVOb4DIKVi@cluster0.m94hxjb.mongodb.net/?retryWrites=true&w=majority")
 db = client["Dog_Care_Research"]
@@ -42,12 +42,22 @@ def getDog(id):
     except Exception as error:
         return f"Error: {error}"
     
-@app.route('/getNutritionPlan/<string:id>', methods=['POST'])
-def getNutritionPlanConnector(id):
+@app.route('/getNutritionPlan/update/<string:id>', methods=['POST'])
+def getNutritionPlanConnectorUpdate(id):
     # Insert a document into the collection and handle the error
     try:
         print("getNutritionPlanConnector")
-        data = getNutritionPlan(id, request.json)
+        data = getUpdatedNutritionPlan(id, request.json)
+        return jsonify(data)
+    except Exception as error:
+        return f"Error: {error}"
+    
+@app.route('/getNutritionPlan/current/<string:id>', methods=['GET'])
+def getNutritionPlanConnectorCurrent(id):
+    # Insert a document into the collection and handle the error
+    try:
+        print("getNutritionPlanConnector")
+        data = getCurrentNutritionPlan(id)
         return jsonify(data)
     except Exception as error:
         return f"Error: {error}"

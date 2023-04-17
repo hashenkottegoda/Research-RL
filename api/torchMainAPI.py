@@ -42,21 +42,8 @@ class CustomEnv:
         arr = np.array(listOflist)
         return arr
     
-    # def reset(self):
-    #     # get user input for weight, fat, emotion
-    #     weight = int(input("Enter weight: "))
-    #     fat = int(input("Enter fat: "))
-    #     emotion = int(input("Enter emotion: "))
-    #     observation = [weight, fat, emotion]
-    #     return observation
     
     def step(self, oldObservation, newObservation):
-        # get user input for weight, fat, emotion
-        # weight = int(input("Enter weight: "))
-        # fat = int(input("Enter fat: "))
-        # emotion = int(input("Enter emotion: "))
-        # observation = [weight, fat, emotion]   
-
         oldWeight = oldObservation[0]
         oldFat = oldObservation[1]
         oldEmotion = oldObservation[2]
@@ -117,7 +104,6 @@ class CustomEnv:
         info = {}
         return  reward, done, info
     
-# if __name__ == '__main__':
 def getPPOAgent():
     env = CustomEnv()
     batch_size = 4
@@ -129,7 +115,6 @@ def getPPOAgent():
                     input_dims=env.sample_observation.shape)
 
     # figure_file = 'plots/cartpole.png'
-
     # best_score = -float('inf')
     # score_history = []
 
@@ -148,7 +133,6 @@ def getPPOAgent():
     score = 0
 
     return env, agent, learn_iters, n_steps, score
-
 
     # score_history.append(score)
     # x = [i+1 for i in range(len(score_history))]

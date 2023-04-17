@@ -8,9 +8,10 @@ learn_iters = None
 n_steps = None
 oldObservation = None
 score = None
+nutritionPlan = None
 
 # function to get nutrition plan
-def getNutritionPlan(id, observationObject):
+def getUpdatedNutritionPlan(id, observationObject):
 
     # get nutrition plan from rule engine
     dog, nutritionPlanFromRuleEngine = getNutritionReq(id)
@@ -42,6 +43,8 @@ def getNutritionPlan(id, observationObject):
         "optimizedNutritionPlan": optimizedNutritionPlan,
         "percentages": percentages
     }
+    global nutritionPlan
+    nutritionPlan = data
     return data
 
 
@@ -120,3 +123,11 @@ def printDetails(action, learn_iters, n_steps, score):
     print(learn_iters)
     print(n_steps)
     print(score)
+
+def getCurrentNutritionPlan(id):
+    global nutritionPlan
+
+    if nutritionPlan is None:
+        dog, nutritionPlanFromRuleEngine = getNutritionReq(id)
+        nutritionPlan = nutritionPlanFromRuleEngine
+    return nutritionPlan
