@@ -21,6 +21,14 @@ def createDog():
         return jsonify({"message": "dog inserted successfully!"})
     except Exception as error:
         return f"Error: {error}"
+    
+@app.route('/dog/update/<string:id>', methods=['PUT'])
+def updateDog(id):
+    try:
+        dogCollection.update_one(({"_id": ObjectId(id)}), {"$set": request.json})
+        return jsonify({"message": "dog updated successfully!"})
+    except Exception as error:
+        return f"Error: {error}"
 
 @app.route('/dog/<string:id>', methods=['GET'])
 def getDog(id):
