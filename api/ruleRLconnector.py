@@ -1,5 +1,16 @@
 from mealRuleEngineAPI import getNutritionReq
 from torchMainAPI import  getPPOAgent, get_action
+import numpy as np
+import pymongo
+from bson import ObjectId
+client = pymongo.MongoClient("mongodb+srv://y4s1assignments:5bdk2OiVOb4DIKVi@cluster0.m94hxjb.mongodb.net/?retryWrites=true&w=majority")
+db = client["Dog_Care_Research"]
+collectionProteins = db["Proteins"]
+collectionCarbohydrates = db["Carbohydrates"]
+collectionVegetables = db["Vegetables"]
+collectionDairy = db["Dairy"]
+
+
 
 # Initialize global variables
 env = None
@@ -129,5 +140,84 @@ def getCurrentNutritionPlan(id):
 
     if nutritionPlan is None:
         dog, nutritionPlanFromRuleEngine = getNutritionReq(id)
-        nutritionPlan = nutritionPlanFromRuleEngine
+        nutritionPlan = {"nutritionPlanFromRuleEngine": nutritionPlanFromRuleEngine}
     return nutritionPlan
+
+def generateMealPlan(id, sourceObject):
+    global nutritionPlan
+    if nutritionPlan is None:
+        print("Nutrition plan is not generated yet")
+    else:
+        # generate meal plan
+        if nutritionPlan.get("optimizedNutritionPlan") is None:
+            print("Nutrition plan is not optimized yet")
+            print(nutritionPlan)
+
+            carbohydrateReq = nutritionPlan["nutritionPlanFromRuleEngine"]["carbohydrate"]
+            proteinReq = nutritionPlan["nutritionPlanFromRuleEngine"]["protein"]
+            fatReq = nutritionPlan["nutritionPlanFromRuleEngine"]["fat"]
+            energyReq = nutritionPlan["nutritionPlanFromRuleEngine"]["energy"]
+            vitaminsReq = nutritionPlan["nutritionPlanFromRuleEngine"]["vitamins"]
+            mineralsReq = nutritionPlan["nutritionPlanFromRuleEngine"]["minerals"]
+        else:
+            print("Nutrition plan is optimized ")
+            optimizedNutritionPlanRef = nutritionPlan["optimizedNutritionPlan"]
+            print(optimizedNutritionPlanRef)
+            print(type(optimizedNutritionPlanRef))
+
+            carbohydrateReq = optimizedNutritionPlanRef["carbohydrate"]
+            proteinReq = optimizedNutritionPlanRef["protein"]
+            fatReq = optimizedNutritionPlanRef["fat"]
+            energyReq = optimizedNutritionPlanRef["energy"]
+            vitaminsReq = optimizedNutritionPlanRef["vitamins"]
+            mineralsReq = optimizedNutritionPlanRef["minerals"]
+    
+    proteinSource =  collectionProteins.find_one({"name": sourceObject["protein"]})
+    carbohydrateSource =  collectionCarbohydrates.find_one({"name": sourceObject["carbohydrate"]})
+    vegetableSource =  collectionVegetables.find_one({"name": sourceObject["vegetable"]})
+    dairySource =  collectionDairy.find_one({"name": sourceObject["dairy"]})
+
+    print(carbohydrateReq, proteinReq, fatReq, energyReq, vitaminsReq, mineralsReq)
+    print(proteinSource, carbohydrateSource, vegetableSource, dairySource)
+
+    proteinSourceWeight = (proteinReq*70)/proteinSource["p"]
+    carbohydrateSourceWeight = (carbohydrateReq*70)/carbohydrateSource["c"]
+    vegetableSourceWeight = (carbohydrateReq*30)/vegetableSource["c"]
+    dairySourceWeight = (proteinReq*30)/dairySource["p"]
+
+    print(carbohydrateReq, proteinReq, fatReq, energyReq, vitaminsReq, mineralsReq)
+
+    # get balanced nutrition requirement from vegetable source and dairy source
+    # if vegetableSource weight = v and dairySource weight = d
+    
+    # p*proteinSource["p"]/100 + c*carbohydrateSource["p"]/100 + v*vegetableSource["p"]/100 + d*dairySource["p"]/100 == proteinReq
+    # p*proteinSource["c"]/100 + c*carbohydrateSource["c"]/100 + v*vegetableSource["c"] + d*dairySource["c"] == carbohydrateReq
+    # p*proteinSource["f"]/100 + c*carbohydrateSource["f"]/100 + v*vegetableSource["f"] + d*dairySource["f"] == fatReq
+    # p*proteinSource["ckl"]/100 + c*carbohydrateSource["ckl"]/100 + v*vegetableSource["ckl"] + d*dairySource["ckl"] == energyReq
+
+    # solving problem using linear algebra (Ax = b)
+    # A = np.array([
+    #     [proteinSource["p"]/100, carbohydrateSource["p"]/100, vegetableSource["p"]/100, dairySource["p"]/100], 
+    #     [proteinSource["c"]/100, carbohydrateSource["c"]/100, vegetableSource["c"]/100, dairySource["c"]/100], 
+    #     [proteinSource["f"]/100, carbohydrateSource["f"]/100, vegetableSource["f"]/100, dairySource["f"]/100], 
+    #     [proteinSource["ckl"]/100, carbohydrateSource["ckl"]/100, vegetableSource["ckl"]/100, dairySource["ckl"]/100]
+    #               ])
+    # # x = [v, d]
+    # b = np.array([proteinReq, carbohydrateReq, fatReq, energyReq])
+    # x = np.linalg.solve(A, b)
+
+    # proteinSourceWeight = x[0]
+    # carbohydrateSourceWeight = x[1]
+    # vegetableSourceWeight = x[2]
+    # dairySourceWeight = x[3]
+
+  
+    print(proteinSourceWeight, carbohydrateSourceWeight, vegetableSourceWeight, dairySourceWeight)
+
+    sourceWeights = {
+        proteinSource["name"]: proteinSourceWeight,
+        carbohydrateSource["name"]: carbohydrateSourceWeight,
+        vegetableSource["name"]: vegetableSourceWeight,
+        dairySource["name"]: dairySourceWeight
+    }
+    return sourceWeights
