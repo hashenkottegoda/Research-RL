@@ -5,6 +5,8 @@ import pymongo
 client = pymongo.MongoClient("mongodb+srv://y4s1assignments:5bdk2OiVOb4DIKVi@cluster0.m94hxjb.mongodb.net/?retryWrites=true&w=majority")
 db = client["Dog_Care_Research"]
 dogCollection = db["Dogs"]
+collectionMealPlan = db["MealPlan"]
+
 from bson import ObjectId, json_util
 
 app = Flask(__name__)
@@ -67,6 +69,16 @@ def getgeneratedMealPlan(id):
     # Insert a document into the collection and handle the error
     try:
         data = generateMealPlan(id, request.json)
+        return jsonify(data)
+    except Exception as error:
+        return f"Error: {error}"
+    
+@app.route('/getMealPlanFromDb/<string:id>',)
+def getMealPlanFromDb(id):
+    try:
+        data = collectionMealPlan.find_one({"_id": ObjectId(id)})
+        data = json_util.dumps(data)
+
         return jsonify(data)
     except Exception as error:
         return f"Error: {error}"

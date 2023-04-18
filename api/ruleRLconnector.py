@@ -9,6 +9,7 @@ collectionProteins = db["Proteins"]
 collectionCarbohydrates = db["Carbohydrates"]
 collectionVegetables = db["Vegetables"]
 collectionDairy = db["Dairy"]
+collectionMealPlan = db["MealPlan"]
 
 
 
@@ -215,9 +216,17 @@ def generateMealPlan(id, sourceObject):
     print(proteinSourceWeight, carbohydrateSourceWeight, vegetableSourceWeight, dairySourceWeight)
 
     sourceWeights = {
-        proteinSource["name"]: proteinSourceWeight,
-        carbohydrateSource["name"]: carbohydrateSourceWeight,
-        vegetableSource["name"]: vegetableSourceWeight,
-        dairySource["name"]: dairySourceWeight
+        proteinSource["name"]: round(proteinSourceWeight, 2),
+        carbohydrateSource["name"]: round(carbohydrateSourceWeight, 2),
+        vegetableSource["name"]: round(vegetableSourceWeight, 2),
+        dairySource["name"]: round(dairySourceWeight, 2)
     }
+
+    saveMealPlanToDb(id, sourceWeights)
     return sourceWeights
+
+def saveMealPlanToDb(id, sourceWeights):
+    # save meal plan to db
+    id = ObjectId(id)
+    savedDoc =  collectionMealPlan.replace_one({"_id": id}, sourceWeights,upsert=True)
+    return savedDoc
