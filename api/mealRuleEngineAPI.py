@@ -11,7 +11,7 @@ mineralCollection = db["Minerals"]
 dogCollection = db["Dogs"]
 
 class Dog(object):
-    def __init__(self, breed, activityLevel, age, weight, sex, pregnancy, noOfPuppies, healthStatus, fatLevel ):
+    def __init__(self, breed, activityLevel, age, weight, sex, pregnancy, noOfPuppies, healthStatus, fatLevel, targetWeight, averageActivityLevel ):
         self.breed = breed
         self.sClass = None
         self.activityLevel = activityLevel
@@ -21,9 +21,10 @@ class Dog(object):
         self.pregnancy = pregnancy
         self.noOfPuppies = noOfPuppies
         self.healthStatus = healthStatus
+        self.targetWeight = targetWeight
         self.minWeight = None
         self.maxWeight = None
-        self.averageActivityLevel = None
+        self.averageActivityLevel = averageActivityLevel
         self.numberOfMeals = None
         self.fatLevel = fatLevel
 # dog = Dog('Basset', 5, 30, 50, 'female', 'True', 4, ['Restlessness', 'Anorexia', 'muscle weakness'])
@@ -36,7 +37,7 @@ def getDogById(id):
   dogObj = dogCollection.find_one({"_id": id})
 
   # create dog object from the dog object retrieved from the database
-  dog = Dog(dogObj["breed"], dogObj["activityLevel"], dogObj["age"], dogObj["weight"], dogObj["sex"], dogObj["pregnancy"], dogObj["noOfPuppies"], dogObj["healthStatus"], dogObj["fatLevel"])
+  dog = Dog(dogObj["breed"], dogObj["activityLevel"], dogObj["age"], dogObj["weight"], dogObj["sex"], dogObj["pregnancy"], dogObj["noOfPuppies"], dogObj["healthStatus"], dogObj["fatLevel"], dogObj["targetWeight"],  dogObj["averageActivityLevel"])
 
   return dog
 
@@ -130,14 +131,41 @@ def fetchDbInfo(dog):
     print("Db Connection successful!")
   except pymongo.errors.ServerSelectionTimeoutError as error:
     print(f"Connection failed: {error}")
+  print(dog)
+  if(dog.breed == "other"):
+    print("other"+ dog.breed)
+    targetWeight = dog.targetWeight
+    print(targetWeight)
+    print(type(targetWeight))
 
-  dogDb = collection.find_one({"Name": dog.breed})
+    if(targetWeight < 15):
+      dog.sClass = 1
+      dog.maxWeight = 15
+      dog.minWeight = 0
+    elif(targetWeight < 30):
+      dog.sClass = 2
+      dog.maxWeight = 30
+      dog.minWeight = 15
+    elif(targetWeight < 55):
+      dog.sClass = 3
+      dog.maxWeight = 55
+      dog.minWeight = 30
+    elif(targetWeight < 80):
+      dog.sClass = 4
+      dog.maxWeight = 80
+      dog.minWeight = 55
+    else:
+      dog.sClass = 5
+      dog.maxWeight = 120
+      dog.minWeight = 80
+    dog.averageActivityLevel = dog.averageActivityLevel
 
-  dog.sClass = dogDb["size"]
-  dog.minWeight = dogDb["MinWeight"]
-  dog.maxWeight = dogDb["MaxWeight"]
-  dog.averageActivityLevel = dogDb["AverageActivity"]
-
+  else:
+    dogDb = collection.find_one({"Name": dog.breed})
+    dog.sClass = dogDb["size"]
+    dog.minWeight = dogDb["MinWeight"]
+    dog.maxWeight = dogDb["MaxWeight"]
+    dog.averageActivityLevel = dogDb["AverageActivity"]
   return dog
 
 def getProteinReq(dog):
