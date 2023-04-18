@@ -161,6 +161,7 @@ def fetchDbInfo(dog):
     dog.averageActivityLevel = dog.averageActivityLevel
 
   else:
+    print("not other"+ dog.breed)
     dogDb = collection.find_one({"Name": dog.breed})
     dog.sClass = dogDb["size"]
     dog.minWeight = dogDb["MinWeight"]
@@ -412,7 +413,7 @@ def getNutritionReq(id):
     healthdic['healthStatus'] = value
     dogHealthStatus.append(healthdic)
 
-    nutritionPlanFromRuleEngine = {
+  nutritionPlanFromRuleEngine = {
     'protein': getProteinReq(dog),
     'fat': getFatReq(dog),
     'energy': getEnergyReq(dog),
