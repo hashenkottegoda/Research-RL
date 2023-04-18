@@ -11,10 +11,10 @@ class CustomEnv:
 
     def getActionSpace(self):
         # Protein, fat, carbohydrate, energy requirement
-        proteinP = [ -0.1, 0, 0.1]
-        fatP = [ -0.1, 0, 0.1]
-        carbohydrateP = [ -0.1, 0, 0.1]
-        energyP = [ -0.1, 0, 0.1]
+        proteinP = [ -0.2, -0.1, 0, 0.1, 0.2]
+        fatP = [ -0.2, -0.1, 0, 0.1, 0.2]
+        carbohydrateP = [ -0.2, -0.1, 0, 0.1, 0.2]
+        energyP = [  -0.2, -0.1, 0, 0.1, 0.2]
 
         # create a list of lists and put the elements to the list
         listOflist = []
