@@ -160,7 +160,8 @@ if __name__ == '__main__':
 
         print('step', n_steps, 'score %.1f' % score,
         'time_steps', n_steps, 'learning_steps', learn_iters)
-    score_history.append(score)
+        score_history.append(score)
+
 
     agent.save_models()
     
