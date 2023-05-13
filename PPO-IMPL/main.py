@@ -124,7 +124,7 @@ if __name__ == '__main__':
                     alpha=alpha, n_epochs=n_epochs, 
                     input_dims=env.sample_observation.shape)
 
-    figure_file = 'plots/cartpole.png'
+    figure_file = 'plots/fg6.png'
 
     best_score = -float('inf')
     score_history = []
