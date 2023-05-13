@@ -9,6 +9,7 @@ class CustomEnv:
         self.sample_observation = self.observation_space[0]
         self.reward_range = (-float('inf'), float('inf'))
 
+    # returns action space of the environment
     def getActionSpace(self):
         # Protein, fat, carbohydrate, energy requirement
         proteinP = [ -0.2, -0.1, 0, 0.1, 0.2]
@@ -26,6 +27,7 @@ class CustomEnv:
                         listOflist.append(element)
         return listOflist
     
+    # returns state/observation space of the environment
     def getObservationSpace(self):
         weightArr = [1, 2, 3]
         fatArr = [1,2,3,4,5]
@@ -105,11 +107,14 @@ class CustomEnv:
         return  reward, done, info
     
 def getPPOAgent():
+
+    # create cusom environment object and initialize variables
     env = CustomEnv()
     batch_size = 4
     n_epochs = 10
     alpha = 0.0003
 
+    # create agent object
     agent = Agent(n_actions=len(env.action_space), batch_size=batch_size, 
                     alpha=alpha, n_epochs=n_epochs, 
                     input_dims=env.sample_observation.shape)
@@ -118,6 +123,7 @@ def getPPOAgent():
     # best_score = -float('inf')
     # score_history = []
 
+    #  learning iterations and steps
     learn_iters = 0
     # avg_score = 0
     n_steps = 0
