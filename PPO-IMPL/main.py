@@ -124,7 +124,7 @@ if __name__ == '__main__':
                     alpha=alpha, n_epochs=n_epochs, 
                     input_dims=env.sample_observation.shape)
 
-    figure_file = 'plots/plot.png'
+    figure_file = 'plots/fg6.png'
 
     best_score = -float('inf')
     score_history = []
@@ -165,5 +165,5 @@ if __name__ == '__main__':
 
     agent.save_models()
     
-    x = [i+1 for i in range(len(score_history))]
+    x = [i+1 for i in range(len(score_history)-1)]
     plot_learning_curve(x, score_history, figure_file)
