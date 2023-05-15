@@ -181,48 +181,32 @@ def generateMealPlan(id, sourceObject):
     print(carbohydrateReq, proteinReq, fatReq, energyReq, vitaminsReq, mineralsReq)
     print(proteinSource, carbohydrateSource, vegetableSource, dairySource)
 
-    proteinSourceWeight = (proteinReq*70)/proteinSource["p"]
-    carbohydrateSourceWeight = (carbohydrateReq*70)/carbohydrateSource["c"]
-    vegetableSourceWeight = (carbohydrateReq*30)/vegetableSource["c"]
-    dairySourceWeight = (proteinReq*30)/dairySource["p"]
-
-    if proteinSourceWeight > 400:
-        proteinSourceWeight = 400
-    
-    if carbohydrateSourceWeight > 600:
-        carbohydrateSourceWeight = 600
-
-    if vegetableSourceWeight > 300:
-        vegetableSourceWeight = 300
-
-    if dairySourceWeight > 200:
-        dairySourceWeight = 200
         
     print(carbohydrateReq, proteinReq, fatReq, energyReq, vitaminsReq, mineralsReq)
 
     # get balanced nutrition requirement from vegetable source and dairy source
     # if vegetableSource weight = v and dairySource weight = d
-    
+
     # p*proteinSource["p"]/100 + c*carbohydrateSource["p"]/100 + v*vegetableSource["p"]/100 + d*dairySource["p"]/100 == proteinReq
     # p*proteinSource["c"]/100 + c*carbohydrateSource["c"]/100 + v*vegetableSource["c"] + d*dairySource["c"] == carbohydrateReq
     # p*proteinSource["f"]/100 + c*carbohydrateSource["f"]/100 + v*vegetableSource["f"] + d*dairySource["f"] == fatReq
     # p*proteinSource["ckl"]/100 + c*carbohydrateSource["ckl"]/100 + v*vegetableSource["ckl"] + d*dairySource["ckl"] == energyReq
 
     # solving problem using linear algebra (Ax = b)
-    # A = np.array([
-    #     [proteinSource["p"]/100, carbohydrateSource["p"]/100, vegetableSource["p"]/100, dairySource["p"]/100], 
-    #     [proteinSource["c"]/100, carbohydrateSource["c"]/100, vegetableSource["c"]/100, dairySource["c"]/100], 
-    #     [proteinSource["f"]/100, carbohydrateSource["f"]/100, vegetableSource["f"]/100, dairySource["f"]/100], 
-    #     [proteinSource["ckl"]/100, carbohydrateSource["ckl"]/100, vegetableSource["ckl"]/100, dairySource["ckl"]/100]
-    #               ])
-    # # x = [v, d]
-    # b = np.array([proteinReq, carbohydrateReq, fatReq, energyReq])
-    # x = np.linalg.solve(A, b)
+    A = np.array([
+        [proteinSource["p"]/100, carbohydrateSource["p"]/100, vegetableSource["p"]/100, dairySource["p"]/100], 
+        [proteinSource["c"]/100, carbohydrateSource["c"]/100, vegetableSource["c"]/100, dairySource["c"]/100], 
+        [proteinSource["f"]/100, carbohydrateSource["f"]/100, vegetableSource["f"]/100, dairySource["f"]/100], 
+        [proteinSource["ckl"]/100, carbohydrateSource["ckl"]/100, vegetableSource["ckl"]/100, dairySource["ckl"]/100]
+                  ])
+    # x = [v, d]
+    b = np.array([proteinReq, carbohydrateReq, fatReq, energyReq])
+    x = np.linalg.solve(A, b)
 
-    # proteinSourceWeight = x[0]
-    # carbohydrateSourceWeight = x[1]
-    # vegetableSourceWeight = x[2]
-    # dairySourceWeight = x[3]
+    proteinSourceWeight = x[0]
+    carbohydrateSourceWeight = x[1]
+    vegetableSourceWeight = x[2]
+    dairySourceWeight = x[3]
 
   
     print(proteinSourceWeight, carbohydrateSourceWeight, vegetableSourceWeight, dairySourceWeight)
