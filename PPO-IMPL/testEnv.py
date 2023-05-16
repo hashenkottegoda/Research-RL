@@ -11,6 +11,21 @@ class MazeGame:
         self.num_states = len(self.state_space)
         
         # Define the action space
+        action1 = ['left', 'right', 'up']
+        action2 = ['left', 'right', 'up']
+        action3 = ['left', 'right', 'up']
+        action4 = ['left', 'right', 'up']
+
+         # create a list of lists and put the elements to the list
+        listOflist = []
+        for a in action1:
+            for b in action2:
+                for c in action3:
+                    for d in action4:
+                        element=[a,b,c,d]
+                        listOflist.append(element)
+        self.action_space = listOflist
+
         self.action_space = ['left', 'right', 'up']
         self.num_actions = len(self.action_space)
         
